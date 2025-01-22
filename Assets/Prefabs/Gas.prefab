@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed: 20
-  _gasAmount: 10
+  _gasAmount: 30
 --- !u!135 &4186171024998620274
 SphereCollider:
   m_ObjectHideFlags: 0

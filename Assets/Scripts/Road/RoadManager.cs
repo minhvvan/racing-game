@@ -52,6 +52,7 @@ public class RoadManager : MonoBehaviour
 
     public void StopGame()
     {
+        _currentIdx = 0;
         foreach (var road in _roads)
         {
             road.gameObject.SetActive(false);
