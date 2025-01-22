@@ -11,7 +11,7 @@ public class Road : MonoBehaviour
     void Update()
     {
         transform.position += Vector3.back * (_moveSpeed * Time.deltaTime);
-        if (transform.position.z < -40)
+        if (transform.position.z < -39)
         {
             onExit.Invoke(this);
         }
