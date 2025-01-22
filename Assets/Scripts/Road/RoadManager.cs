@@ -6,11 +6,12 @@ using UnityEngine.Serialization;
 
 public class RoadManager : MonoBehaviour
 {
-    private Queue<Road> _roads = new();
+    private List<Road> _roads = new();
     
     [SerializeField] private GameObject _roadPrefab;
     [SerializeField] private int _roadPoolSize;
     [SerializeField] private int _activeRoadCount;
+    private int _currentIdx;
 
     [SerializeField] private List<GameObject> _spawnPoints = new();
     
@@ -21,28 +22,39 @@ public class RoadManager : MonoBehaviour
             var road = Instantiate(_roadPrefab).GetComponent<Road>();
             road.onExit += OnExitRoad;
             road.gameObject.SetActive(false);
-            _roads.Enqueue(road);
+            _roads.Add(road);
         }
+
+        _currentIdx = _activeRoadCount;
     }
 
     private void OnExitRoad(Road road)
     {
         road.gameObject.SetActive(false);
-        _roads.Enqueue(road);
         
-        var nextRoad = _roads.Dequeue().gameObject;
+        var nextRoad = _roads[_currentIdx].gameObject;
+        _currentIdx = (_currentIdx + 1) % _roadPoolSize;
+        
         nextRoad.transform.position = _spawnPoints.Last().transform.position;
         nextRoad.SetActive(true);
     }
 
-    void Start()
+    public void StartGame()
     {
         //road setting
         for (int i = 0; i < _activeRoadCount; i++)
         {
-            var road = _roads.Dequeue().gameObject;
+            var road = _roads[i].gameObject;
             road.transform.position = _spawnPoints[i].transform.position;
             road.SetActive(true);
+        }
+    }
+
+    public void StopGame()
+    {
+        foreach (var road in _roads)
+        {
+            road.gameObject.SetActive(false);
         }
     }
 }

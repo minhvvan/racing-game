@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 public class VehicleController : MonoBehaviour
@@ -8,7 +9,7 @@ public class VehicleController : MonoBehaviour
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _minXPos;
     [SerializeField] private float _maxXPos;
-    
+
     public void MoveRight()
     {
         float currentPos = Mathf.Min(transform.position.x + _moveSpeed, _maxXPos);
