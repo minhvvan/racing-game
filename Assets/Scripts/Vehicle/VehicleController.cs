@@ -21,4 +21,9 @@ public class VehicleController : MonoBehaviour
         float currentPos = Mathf.Max(transform.position.x - _moveSpeed, _minXPos);
         transform.position = new Vector3(currentPos, 0, 0f);
     }
+
+    public void ResetPosition()
+    {
+        gameObject.transform.position = Vector3.zero;
+    }
 }

@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private RoadManager _roadManager;
     [SerializeField] private UIController _uiController;
+    [SerializeField] private GasSpawner _gasSpawner;
+    [SerializeField] private InputController _inputController;
     
     private void Awake()
     {
@@ -58,6 +60,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         _roadManager.StartGame();
+        _gasSpawner.StartGame();
         _gas.Value = 100f;
         _gameStart.OnNext(Unit.Default);
     }
@@ -65,6 +68,7 @@ public class GameManager : MonoBehaviour
     public void RetryGame()
     {
         StartGame();
+        _inputController.Reset();
     }
     
     public void ExitGame()
@@ -79,11 +83,14 @@ public class GameManager : MonoBehaviour
     private void GameOver()
     {
         _roadManager.StopGame();
+        _gasSpawner.StopGame();
+        _inputController.StopInput();
         _uiController.GameOver();
     }
 
     public void AddGas(float amount)
     {
         _gas.Value += amount;
+        _uiController.UpdateGas(_gas.Value);
     }
 }

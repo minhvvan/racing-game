@@ -14,31 +14,33 @@ public class InputController : MonoBehaviour
     
     private readonly ReactiveProperty<bool> _isLeftPressed = new ReactiveProperty<bool>(false);
     private readonly ReactiveProperty<bool> _isRightPressed = new ReactiveProperty<bool>(false);
+
+    private CompositeDisposable _inputDisposable = new CompositeDisposable();
     
     void Start()
     {
         _btnLeft.OnPointerDownAsObservable()
             .Subscribe(_ => _isLeftPressed.Value = true)
-            .AddTo(this);
+            .AddTo(_inputDisposable);
         
         _btnLeft.OnPointerUpAsObservable()
             .Subscribe(_ => _isLeftPressed.Value = false)
-            .AddTo(this);
+            .AddTo(_inputDisposable);
             
         _btnRight.OnPointerDownAsObservable()
             .Subscribe(_ => _isRightPressed.Value = true)
-            .AddTo(this);
+            .AddTo(_inputDisposable);
         
         _btnRight.OnPointerUpAsObservable()
             .Subscribe(_ => _isRightPressed.Value = false)
-            .AddTo(this);
+            .AddTo(_inputDisposable);
             
         this.UpdateAsObservable()
             .Subscribe(_ => {
                 if(_isLeftPressed.Value) MoveLeft();
                 if(_isRightPressed.Value) MoveRight();
             })
-            .AddTo(this);
+            .AddTo(_inputDisposable);
     }
 
     private void MoveRight()
@@ -51,8 +53,16 @@ public class InputController : MonoBehaviour
         _vehicleController.MoveLeft();
     }
 
-    void Update()
+    public void StopInput()
     {
-        
+        _inputDisposable.Clear();
+        _isLeftPressed.Value = false;
+        _isRightPressed.Value = false;
+    }
+    
+    public void Reset()
+    {
+        Start();
+        _vehicleController.ResetPosition();
     }
 }
