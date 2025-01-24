@@ -1464,6 +1464,7 @@ MonoBehaviour:
   _uiController: {fileID: 867336722}
   _gasSpawner: {fileID: 2112262367}
   _inputController: {fileID: 1108495776}
+  gameState: 0
 --- !u!1 &1502986349
 GameObject:
   m_ObjectHideFlags: 0
@@ -2443,10 +2444,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e9258acfdc1cdd44b48443e18f8dfe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minInterval: 2
-  _maxInterval: 5
+  _minInterval: 4
+  _maxInterval: 7
   gasPrefab: {fileID: 8361158322262991682, guid: 76eae75aa8efb6f4ab17cf53729d85dc,
     type: 3}
+  gas: {fileID: 0}
+  hasGas: 0
 --- !u!1001 &3133085978628885143
 PrefabInstance:
   m_ObjectHideFlags: 0

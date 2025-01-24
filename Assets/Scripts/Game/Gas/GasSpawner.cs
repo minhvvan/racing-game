@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -15,6 +16,10 @@ public class GasSpawner : MonoBehaviour
     private BoxCollider _boxCollider;
     
     private CompositeDisposable _spawnDisposable = new CompositeDisposable();
+
+    public GameObject gas;
+
+    public bool hasGas = false;
     
     private void Awake()
     {
@@ -27,10 +32,13 @@ public class GasSpawner : MonoBehaviour
 
         Observable.Timer(TimeSpan.FromSeconds(interval))
             .Repeat()
+            .Where(_=> gas == null)
             .Subscribe(__ =>
             {
                 var pos = GetRandomPosition();
-                Instantiate(gasPrefab, pos, Quaternion.identity);
+                gas = Instantiate(gasPrefab, pos, Quaternion.identity);
+                gas.OnDestroyAsObservable().Subscribe(_ => gas = null);
+                hasGas = true;
             })
             .AddTo(_spawnDisposable);
     }
@@ -40,7 +48,7 @@ public class GasSpawner : MonoBehaviour
         _spawnDisposable.Clear(); // 모든 구독 제거
     }
     
-    public Vector3 GetRandomPosition()
+    private Vector3 GetRandomPosition()
     {
         Bounds bounds = _boxCollider.bounds;
         return new Vector3(

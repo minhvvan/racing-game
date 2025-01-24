@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UIController _uiController;
     [SerializeField] private GasSpawner _gasSpawner;
     [SerializeField] private InputController _inputController;
+
+    public GameState gameState = GameState.None;
     
     private void Awake()
     {
@@ -30,6 +32,7 @@ public class GameManager : MonoBehaviour
     
     void Start()
     {
+        gameState = GameState.MainMenu;
         _uiController.InitGame();
 
         // gas가 0이 되면 게임오버
@@ -59,6 +62,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        gameState = GameState.InGame;
         _roadManager.StartGame();
         _gasSpawner.StartGame();
         _gas.Value = 100f;
@@ -67,6 +71,7 @@ public class GameManager : MonoBehaviour
     
     public void RetryGame()
     {
+        gameState = GameState.InGame;
         StartGame();
         _inputController.Reset();
     }
@@ -82,6 +87,7 @@ public class GameManager : MonoBehaviour
 
     private void GameOver()
     {
+        gameState = GameState.GameOver;
         _roadManager.StopGame();
         _gasSpawner.StopGame();
         _inputController.StopInput();
@@ -93,4 +99,13 @@ public class GameManager : MonoBehaviour
         _gas.Value += amount;
         _uiController.UpdateGas(_gas.Value);
     }
+}
+
+public enum GameState
+{
+    None,
+    MainMenu,
+    InGame,
+    GameOver,
+    Max
 }
